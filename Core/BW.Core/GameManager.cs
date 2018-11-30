@@ -4,10 +4,12 @@ namespace BW.Core
 {
     public abstract class GameManager
     {
+        public abstract Board Board { get; }
+
         public event CharacterMoveHandler OnCharacterMove;
         public event ChangeTurnHandler OnChangeTurn;
         public event RollDieHandler OnRollDie;
-        public event ChangeCharectorAmountHandler OnChangeCharectorAmount;
+        public event ChangeCharectorBalanceHandler OnChangeCharectorBalance;
         public event ChangeOwnerHandler OnChangeOwner;
 
 
@@ -17,22 +19,28 @@ namespace BW.Core
         public abstract Task<int> RollDie();
 
 
-        public abstract Task ChangeCharectorAmount(Character character, double newAmount);
+        public abstract Task ChangeCharectorBalance(Character character, double newBalance);
         public abstract Task SetOwner(Character newOwner, Card card);
         public abstract Task RemoveOwner(Character oldOwner, Card card);
         // public abstract Task MortgageCard(Character owner, Character mortgageTo, Card card);
+
+        protected void RaiseOnCharacterMove(CharacterMoveArgs args) => OnCharacterMove(this, args);
+        protected void RaiseOnChangeTurn(ChangeTurnArgs args) => OnChangeTurn(this, args);
+        protected void RaiseOnRollDie(int number) => OnRollDie(this, number);
+        protected void RaiseOnChangeCharectorBalance(Character character, double newBalance) => OnChangeCharectorBalance(this, character, newBalance);
+        protected void RaiseOnChangeOwner(ChangeOwnerArgs args) => OnChangeOwner(this, args);
 
     }
 
     public delegate void CharacterMoveHandler(GameManager manager, CharacterMoveArgs args);
     public delegate void ChangeTurnHandler(GameManager manager, ChangeTurnArgs args);
     public delegate void RollDieHandler(GameManager manager, int number);
-    public delegate void ChangeCharectorAmountHandler(GameManager manager, Character character, int amount);
+    public delegate void ChangeCharectorBalanceHandler(GameManager manager, Character character, double newBalance);
     public delegate void ChangeOwnerHandler(GameManager manager, ChangeOwnerArgs args);
 
     public class ChangeOwnerArgs
     {
-        public ChangeOwnerArgs(Character oldOwner, Character newOwner, Character card)
+        public ChangeOwnerArgs(Character oldOwner, Character newOwner, Card card)
         {
             OldOwner = oldOwner;
             NewOwner = newOwner;
@@ -41,7 +49,7 @@ namespace BW.Core
 
         public Character OldOwner { get; }
         public Character NewOwner { get; }
-        public Character Card { get; }
+        public Card Card { get; }
     }
 
     public class ChangeTurnArgs
