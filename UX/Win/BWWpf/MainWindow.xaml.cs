@@ -20,11 +20,18 @@ namespace BWWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            DataContext = viewModel = new MainWindowViewModel();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.Start();
         }
     }
 }

@@ -6,8 +6,10 @@ namespace BW.Core
 
     public abstract class Board
     {
-        public abstract IReadOnlyCollection<Card> Cards { get; }
-        public abstract IReadOnlyCollection<Character> Characters { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract IReadOnlyList<Card> Cards { get; }
+        public abstract IReadOnlyList<Character> Characters { get; }
 
         public abstract Task InitilizeBoard(GameManager manager);
     }

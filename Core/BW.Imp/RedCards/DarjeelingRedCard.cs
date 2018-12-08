@@ -19,6 +19,20 @@ namespace BW.Imp.RedCards
         public override double? Rent => current_Rent;
         public override string Description { get; } = "Come to feel the winter in summer.";
 
+        public DarjeelingRedCard()
+        {
+
+        }
+
+        public DarjeelingRedCard(string name, string color, string description, double? price, double rent = 300d)
+        {
+            Name = name;
+            Color = color;
+            Description = description;
+            Price = price;
+            current_Rent = rent;
+        }
+
         public override Task InitilizeInBoard(GameManager manager, Board board, int cardLocation)
         {
             cardLocationInBoard = cardLocation;
@@ -41,6 +55,7 @@ namespace BW.Imp.RedCards
                 {
                     //Owner(s) found
                     await manager.IncreaseCharactorAmount(charactorOnCard, -current_Rent); // charge current player
+                    RaiseOnRentCharged(charactorOnCard, current_Rent);
 
                     foreach (var owner in owners)
                         await manager.IncreaseCharactorAmount(owner, current_Rent / owners.Length); // increase owns amounts

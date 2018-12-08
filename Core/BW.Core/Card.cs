@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace BW.Core
 {
@@ -11,7 +12,18 @@ namespace BW.Core
         public abstract double? Rent { get; }
         public virtual string Description { get; }
 
+        public event ChangePriceHandler OnChangePrice;
+        public event ChangeRentHandler OnChangeRent;
+        public event Action<Card, Character, double?> OnRentCharged;
+
         public abstract Task InitilizeInBoard(GameManager manager, Board board, int cardLocation);
         // public abstract Task OnCharactorStepIn(GameManager manager, Character character);
+
+        protected void RaiseOnChangePrice(double? newPrice) => OnChangePrice(this, newPrice);
+        protected void RaiseOnChangeRent(double? newRent) => OnChangeRent(this, newRent);
+        protected void RaiseOnRentCharged(Character character, double? rent) => OnRentCharged(this, character, rent);
     }
+
+    public delegate void ChangePriceHandler(Card card, double? newPrice);
+    public delegate void ChangeRentHandler(Card card, double? newRent);
 }

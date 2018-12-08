@@ -7,6 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button Content="click me" Click="Button_Click" Height="30" Width="30" Panel.ZIndex="20"/>
+        <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                <ItemsControl ItemsSource="{Binding Board.CardsUx}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="110" Height="110" BorderThickness="1" Padding="3" Margin="2">
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding Price}" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>

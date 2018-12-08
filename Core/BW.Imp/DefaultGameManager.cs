@@ -10,7 +10,7 @@ namespace BW.Imp
     {
         private Random random = new Random();
 
-        private Dictionary<Character, AdditionalCharInfo> charDetails;
+        private Dictionary<Character, AdditionalCharInfo> charDetails = new Dictionary<Character, AdditionalCharInfo>();
         public override Board Board { get; }
         public Character ActiveCharacter { get; private set; }
 
