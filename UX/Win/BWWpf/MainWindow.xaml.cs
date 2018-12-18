@@ -33,5 +33,10 @@ namespace BWWpf
         {
             viewModel.Start();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            viewModel.RollDie();
+        }
     }
 }

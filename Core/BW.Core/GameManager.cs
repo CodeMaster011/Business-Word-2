@@ -11,12 +11,15 @@ namespace BW.Core
         public event RollDieHandler OnRollDie;
         public event ChangeCharectorBalanceHandler OnChangeCharectorBalance;
         public event ChangeOwnerHandler OnChangeOwner;
+        public event ChangeActiveCharacterHandler OnChangeActiveCharacter;
+
 
 
         public abstract Task MoveCharactor(Character character, int newLocation);
         public abstract Task ChangeTurnTo(Character character);
         public abstract Task NextTurn();
         public abstract Task<int> RollDie();
+        public abstract int? GetCharactorLocation(Character character);
 
 
         public abstract Task ChangeCharectorBalance(Character character, double newBalance);
@@ -24,11 +27,12 @@ namespace BW.Core
         public abstract Task RemoveOwner(Character oldOwner, Card card);
         // public abstract Task MortgageCard(Character owner, Character mortgageTo, Card card);
 
-        protected void RaiseOnCharacterMove(CharacterMoveArgs args) => OnCharacterMove(this, args);
-        protected void RaiseOnChangeTurn(ChangeTurnArgs args) => OnChangeTurn(this, args);
-        protected void RaiseOnRollDie(int number) => OnRollDie(this, number);
-        protected void RaiseOnChangeCharectorBalance(Character character, double newBalance) => OnChangeCharectorBalance(this, character, newBalance);
-        protected void RaiseOnChangeOwner(ChangeOwnerArgs args) => OnChangeOwner(this, args);
+        protected void RaiseOnCharacterMove(CharacterMoveArgs args) => OnCharacterMove?.Invoke(this, args);
+        protected void RaiseOnChangeTurn(ChangeTurnArgs args) => OnChangeTurn?.Invoke(this, args);
+        protected void RaiseOnRollDie(int number) => OnRollDie?.Invoke(this, number);
+        protected void RaiseOnChangeCharectorBalance(Character character, double newBalance) => OnChangeCharectorBalance?.Invoke(this, character, newBalance);
+        protected void RaiseOnChangeOwner(ChangeOwnerArgs args) => OnChangeOwner?.Invoke(this, args);
+        protected void RaiseOnChangeActiveCharacter(Character active, Character old) => OnChangeActiveCharacter?.Invoke(this, active, old);
 
     }
 
@@ -37,6 +41,7 @@ namespace BW.Core
     public delegate void RollDieHandler(GameManager manager, int number);
     public delegate void ChangeCharectorBalanceHandler(GameManager manager, Character character, double newBalance);
     public delegate void ChangeOwnerHandler(GameManager manager, ChangeOwnerArgs args);
+    public delegate void ChangeActiveCharacterHandler(GameManager manager, Character active, Character old);
 
     public class ChangeOwnerArgs
     {

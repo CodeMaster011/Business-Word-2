@@ -15,9 +15,10 @@ namespace BWWpf.Core
     public class WpfGridBoard : GridBoard
     {
         private readonly string[,] gridMatrix;
+        private int effectiveCardCount;
 
-        public override IReadOnlyList<Card> Cards => base.Cards;
-        public ObservableCollection<ObservableCollection<Card>> CardsUx { get; set; } = new ObservableCollection<ObservableCollection<Card>>();
+        public override int EffectiveCardCount => effectiveCardCount;
+        public ObservableCollection<ObservableCollection<WpfCard>> CardsUx { get; set; } = new ObservableCollection<ObservableCollection<WpfCard>>();
 
         /* 4x4 (W X H)
          * [R07][R08][S09][R10]
@@ -38,14 +39,28 @@ namespace BWWpf.Core
             AddCardsToUx(allocatedCards);
 
             await InitilizeCardsToBoard(manager, allocatedCards);
+
+            manager.OnCharacterMove += Manager_OnCharacterMove;
+        }
+
+        private void Manager_OnCharacterMove(GameManager manager, CharacterMoveArgs args)
+        {
+            var oldCard = GetWpfCardFromIndex(args.OldLocation);
+            if (oldCard != null)
+                oldCard.Characters.Remove(args.Character);
+            var newCard = GetWpfCardFromIndex(args.NewLocation);
+            if (newCard != null)
+                newCard.Characters.Add(args.Character);
         }
 
         protected void AddCardsToUx(IReadOnlyList<Card> cards)
         {
+            effectiveCardCount = 0;
+
             for (int row = 0; row < gridMatrix.GetLength(0); row++)
             {
                 if (row >= CardsUx.Count)
-                    CardsUx.Add(new ObservableCollection<Card>());
+                    CardsUx.Add(new ObservableCollection<WpfCard>());
 
                 var currentRow = CardsUx[row];
 
@@ -54,7 +69,8 @@ namespace BWWpf.Core
                     (CardType cardType, int index) gridData = InterpreteGridData(gridMatrix[row, col]);
                     if (gridData.index >= 0)
                     {
-                        currentRow.Add(cards[gridData.index - 1]);
+                        currentRow.Add(new WpfCard(gridData.index - 1, cards[gridData.index - 1]));
+                        effectiveCardCount++;
                     }
                     else
                     {
@@ -64,6 +80,21 @@ namespace BWWpf.Core
                     Debug.WriteLine($"{row},{col}");
                 }
             }
+        }
+
+        protected WpfCard GetWpfCardFromIndex(int index)
+        {
+            for (int i = 0; i < CardsUx.Count; i++)
+            {
+                if (CardsUx[i] == null) continue;
+
+                for (int j = 0; j < CardsUx[i].Count; j++)
+                {
+                    if (CardsUx[i][j]?.Index == index)
+                        return CardsUx[i][j];
+                }
+            }
+            return null;
         }
     }
 }

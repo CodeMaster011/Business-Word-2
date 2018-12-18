@@ -9,6 +9,7 @@ namespace BW.Core
 
 
         public virtual double Balance { get; protected set; } = 0d;
+        public virtual string Color { get; set; } = "Red";
         public abstract string Name { get; }
         public virtual bool IsInGame { get; } = true;
 

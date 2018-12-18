@@ -7,12 +7,12 @@ namespace BW.Imp
 {
     public class DefaultPlayer : Player
     {
-        private List<Card> ownedCards;
+        private List<Card> ownedCards = new List<Card>();
 
         public override IReadOnlyCollection<Card> OwnedCards => ownedCards;
         public override string Name { get; }
 
-        public DefaultPlayer(string name, double balance, IEnumerable<Card> ownedCards = null)
+        public DefaultPlayer(string name, double balance, IEnumerable<Card> ownedCards = null, string color = "Red")
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("message", nameof(name));
@@ -24,6 +24,7 @@ namespace BW.Imp
             else
                 ownedCards = new List<Card>();
             Balance = balance;
+            Color = color;
         }
 
         public override Task InitilizeInBoard(GameManager manager)

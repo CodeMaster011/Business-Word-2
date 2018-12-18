@@ -7,33 +7,61 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="click me" Click="Button_Click" Height="30" Width="30" Panel.ZIndex="20"/>
         <Grid>
-            <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                <ItemsControl ItemsSource="{Binding Board.CardsUx}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="110" Height="110" BorderThickness="1" Padding="3" Margin="2">
-                                            <StackPanel Orientation="Vertical">
-                                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
-                                                <TextBlock Text="{Binding Price}" TextWrapping="Wrap"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" Background="Red"/>
+
+            <Grid Grid.Column="0">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Board.CardsUx}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Width="110" Height="110" BorderThickness="1" Padding="3" Margin="2">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Text="{Binding Card.Name}" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding Price}" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding Index}" TextWrapping="Wrap"/>
+                                                    <ItemsControl ItemsSource="{Binding Characters}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <StackPanel Orientation="Vertical">
+                    <Button Content="Start" Click="Button_Click" Height="30" Width="30" Panel.ZIndex="20"/>
+                    <Button Content="Roll Die" Click="Button_Click_1" Height="30" Width="30" Margin="60 0 0 0" Panel.ZIndex="20"/>
+                    <TextBlock Text="{Binding ActivePlayer.Name}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding Location}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding Die}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
         </Grid>
+        
     </Grid>
 </Window>

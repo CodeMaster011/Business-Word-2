@@ -51,11 +51,12 @@ namespace BW.Imp
         public override Task NextTurn()
         {
             var _activePlayer = ActiveCharacter;
-            var nextTurnNumber = charDetails[_activePlayer].TrunNumber + 1 % charDetails.Count;
+            var nextTurnNumber = (charDetails[_activePlayer].TrunNumber + 1) % charDetails.Count;
             var nextActivePlayer = charDetails.First(p => p.Value.TrunNumber == nextTurnNumber).Key;
             ActiveCharacter = nextActivePlayer;
 
             RaiseOnChangeTurn(new ChangeTurnArgs(_activePlayer, nextActivePlayer));
+            RaiseOnChangeActiveCharacter(nextActivePlayer, _activePlayer);
 
             return Task.CompletedTask;
         }
@@ -86,6 +87,18 @@ namespace BW.Imp
             return Task.CompletedTask;
         }
 
+        public override int? GetCharactorLocation(Character character) => charDetails.ContainsKey(character) ? charDetails[character].Location : new int?();
+
+        public virtual Task MoveCharactorBy(Character character, int byForward)
+        {
+            var oldLocation = GetCharactorLocation(character);
+            if (oldLocation == null)
+                throw new InvalidOperationException($"Unable to find Character: {character?.Name}");
+
+            var nextLocation = (oldLocation.Value + byForward) % Board.EffectiveCardCount;
+
+            return MoveCharactor(character, nextLocation);
+        }
 
         private class AdditionalCharInfo
         {
