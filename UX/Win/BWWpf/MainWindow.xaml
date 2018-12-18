@@ -4,8 +4,57 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BWWpf"
+        xmlns:conv="clr-namespace:BWWpf.ValueConverters"
+        xmlns:templete="clr-namespace:BWWpf.TemplateSelectors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <conv:ToUpperConverter x:Key="ToUpperConverter"/>
+        <conv:StringToBrushConverter x:Key="StringToBrushConverter"/>
+        <templete:CardTempleteSelectorForBoard x:Key="CardTempleteSelectorForBoard"></templete:CardTempleteSelectorForBoard>
+
+        <DataTemplate x:Key="generalCardTemplete">
+            <Border Width="170" Height="238" BorderThickness="2" BorderBrush="Black" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Height="30" BorderThickness="2" BorderBrush="Black" Margin="-2" Background="{Binding Card.Color, Converter={StaticResource StringToBrushConverter}}"/>
+                    <TextBlock Grid.Row="1" Text="{Binding Card.Name, Converter={StaticResource ToUpperConverter}}" 
+                        TextWrapping="Wrap"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        Margin="20 10"
+                               FontSize="20"
+                        FontFamily="Calibri"/>
+
+                    <TextBlock Grid.Row="3" Text="{Binding Price, Converter={StaticResource ToUpperConverter}}" 
+                        TextWrapping="Wrap"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        Margin="20 10"
+                               FontSize="20"
+                        FontFamily="Calibri"/>
+                    <!--<ItemsControl ItemsSource="{Binding Characters}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>-->
+                </Grid>
+
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="emptyCardTemplete">
+            <Grid Width="170" Height="238" Margin="1">
+                
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -21,25 +70,7 @@
                     <ItemsControl ItemsSource="{Binding Board.CardsUx}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Width="110" Height="110" BorderThickness="1" Padding="3" Margin="2">
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Card.Name}" TextWrapping="Wrap"/>
-                                                    <TextBlock Text="{Binding Price}" TextWrapping="Wrap"/>
-                                                    <TextBlock Text="{Binding Index}" TextWrapping="Wrap"/>
-                                                    <ItemsControl ItemsSource="{Binding Characters}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock Text="{Binding Name}"/>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
+                                <ItemsControl ItemsSource="{Binding}" ItemTemplateSelector="{StaticResource CardTempleteSelectorForBoard}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal"/>

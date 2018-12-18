@@ -32,7 +32,7 @@ namespace BWWpf
             Board = new WpfGridBoard(gridData,
             cards: new List<Card>()
             {
-                new DarjeelingRedCard(),
+                new DarjeelingRedCard("Kolkata", "Purple", null, 9870, 6000),
                 new DarjeelingRedCard(),
                 new DarjeelingRedCard(),
                 new DarjeelingRedCard(),
