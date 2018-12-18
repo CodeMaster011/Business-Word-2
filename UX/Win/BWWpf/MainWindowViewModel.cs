@@ -27,7 +27,7 @@ namespace BWWpf
             List<Character> characters = new List<Character>()
             {
                 new DefaultPlayer("Karan", 100d, color: "Blue"),
-                new DefaultPlayer("Karan2", 100d)
+                new DefaultPlayer("Suman", 100d)
             };
             Board = new WpfGridBoard(gridData,
             cards: new List<Card>()

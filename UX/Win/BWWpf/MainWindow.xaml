@@ -38,13 +38,20 @@
                         Margin="20 10"
                                FontSize="20"
                         FontFamily="Calibri"/>
-                    <!--<ItemsControl ItemsSource="{Binding Characters}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock Text="{Binding Name}"/>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>-->
+                    <ItemsControl ItemsSource="{Binding Characters}" Grid.Row="2" HorizontalAlignment="Center">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border ToolTip="{Binding Name}" Width="40" Height="40" CornerRadius="40" Background="{Binding Color, Converter={StaticResource StringToBrushConverter}}" Margin="5">
+                                    <TextBlock Text="{Binding Name[0]}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="White"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                 </Grid>
 
             </Border>
