@@ -19,9 +19,9 @@ namespace BW.Core
         public abstract Task InitilizeInBoard(GameManager manager, Board board, int cardLocation);
         // public abstract Task OnCharactorStepIn(GameManager manager, Character character);
 
-        protected void RaiseOnChangePrice(double? newPrice) => OnChangePrice(this, newPrice);
-        protected void RaiseOnChangeRent(double? newRent) => OnChangeRent(this, newRent);
-        protected void RaiseOnRentCharged(Character character, double? rent) => OnRentCharged(this, character, rent);
+        protected void RaiseOnChangePrice(double? newPrice) => OnChangePrice?.Invoke(this, newPrice);
+        protected void RaiseOnChangeRent(double? newRent) => OnChangeRent?.Invoke(this, newRent);
+        protected void RaiseOnRentCharged(Character character, double? rent) => OnRentCharged?.Invoke(this, character, rent);
     }
 
     public delegate void ChangePriceHandler(Card card, double? newPrice);

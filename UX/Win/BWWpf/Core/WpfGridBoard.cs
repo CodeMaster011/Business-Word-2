@@ -39,8 +39,17 @@ namespace BWWpf.Core
             AddCardsToUx(allocatedCards);
 
             await InitilizeCardsToBoard(manager, allocatedCards);
-
             manager.OnCharacterMove += Manager_OnCharacterMove;
+
+            await InitilizePlayers(manager);
+        }
+
+        protected virtual async Task InitilizePlayers(GameManager manager)
+        {
+            foreach (var c in Characters)
+            {
+                await c.InitilizeInBoard(manager).ConfigureAwait(false);
+            }
         }
 
         private void Manager_OnCharacterMove(GameManager manager, CharacterMoveArgs args)

@@ -20,9 +20,9 @@ namespace BW.Imp
             Name = name;
 
             if(ownedCards != null)
-                ownedCards = new List<Card>(ownedCards);
+                this.ownedCards = new List<Card>(ownedCards);
             else
-                ownedCards = new List<Card>();
+                this.ownedCards = new List<Card>();
             Balance = balance;
             Color = color;
         }

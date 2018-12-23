@@ -7,7 +7,7 @@
         xmlns:conv="clr-namespace:BWWpf.ValueConverters"
         xmlns:templete="clr-namespace:BWWpf.TemplateSelectors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" x:Name="window">
     <Window.Resources>
         <conv:ToUpperConverter x:Key="ToUpperConverter"/>
         <conv:StringToBrushConverter x:Key="StringToBrushConverter"/>
@@ -39,6 +39,22 @@
                                FontSize="20"
                         FontFamily="Calibri"/>
                     <ItemsControl ItemsSource="{Binding Characters}" Grid.Row="2" HorizontalAlignment="Center">
+                        <ItemsControl.Resources>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2">
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Resources>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border ToolTip="{Binding Name}" Width="40" Height="40" CornerRadius="40" Background="{Binding Color, Converter={StaticResource StringToBrushConverter}}" Margin="5">
@@ -61,20 +77,71 @@
                 
             </Grid>
         </DataTemplate>
+
+        <Style TargetType="TextBlock" x:Key="panelHeader">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Background" Value="Blue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0 2 0 5"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" Background="Red"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0">
-                <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                    <ItemsControl ItemsSource="{Binding Board.CardsUx}">
+            
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Padding="0 5">
+                    <Run Text="Active player : "/>
+                    <Run Text="{Binding ActivePlayer.Name, Mode=OneWay}" Foreground="Blue"/>
+                    <Run Text="with market cap of"/>
+                    <Run Text="{Binding ActivePlayer.Balance, StringFormat='0.00', Mode=OneWay}" Foreground="Blue"/>
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
+                <TextBlock Text="News" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Padding="0 5"/>
+            </Grid>
+
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="0.5" BorderBrush="Gray" Padding="5" Margin="2.5">
+                <Grid>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource panelHeader}">
+                        <Run Text="Investment"/>
+                        <Run Text="Opportunities"/>
+                    </TextBlock>
+
+                    <StackPanel Orientation="Vertical">
+                        <Button Content="Start" Click="Button_Click" Height="30" Width="30" Panel.ZIndex="20"/>
+                        <Button Content="Roll Die" Click="Button_Click_1" Height="30" Width="30" Margin="60 0 0 0" Panel.ZIndex="20"/>
+                        <TextBlock Text="{Binding ActivePlayer.Name}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Location}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Die}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+            
+            
+
+            <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" Background="Transparent"/>
+
+            
+            <Grid Grid.Column="2" Grid.Row="1">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Board.CardsUx}" HorizontalAlignment="Center">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <ItemsControl ItemsSource="{Binding}" ItemTemplateSelector="{StaticResource CardTempleteSelectorForBoard}">
@@ -90,16 +157,115 @@
                 </ScrollViewer>
             </Grid>
 
-            <Grid Grid.Column="2">
-                <StackPanel Orientation="Vertical">
-                    <Button Content="Start" Click="Button_Click" Height="30" Width="30" Panel.ZIndex="20"/>
-                    <Button Content="Roll Die" Click="Button_Click_1" Height="30" Width="30" Margin="60 0 0 0" Panel.ZIndex="20"/>
-                    <TextBlock Text="{Binding ActivePlayer.Name}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding Location}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding Die}" Margin="0 0 0 0" HorizontalAlignment="Center"/>
-                </StackPanel>
+            <GridSplitter Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" Background="Transparent"/>
+
+            <Grid Grid.Row="1" Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" BorderThickness="0.5" BorderBrush="Gray" Padding="5" Margin="2.5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Players" Style="{StaticResource panelHeader}"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                            <ItemsControl ItemsSource="{Binding Board.Characters}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Border Grid.RowSpan="2" Grid.Column="0" Background="{Binding Color, Converter={StaticResource StringToBrushConverter}}" Width="5" Margin="0 0 4 0"/>
+
+                                            <TextBlock Text="{Binding Name}" Grid.Column="1" FontSize="20"/>
+                                            <TextBlock Text="{Binding Balance, StringFormat='0.00'}" Grid.Column="1" Grid.Row="1" FontSize="16"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+                
+
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="5" Background="Transparent"/>
+                <!--<GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="5" Background="Transparent"/>-->
+
+                <Border Grid.Row="2" BorderThickness="0.5" BorderBrush="Gray" Padding="5" Margin="2.5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Owned Lands" Style="{StaticResource panelHeader}"/>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                            <ItemsControl ItemsSource="{Binding ActivePlayer.OwnedCards}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Border Grid.RowSpan="2" Grid.Column="0" Background="{Binding Color, Converter={StaticResource StringToBrushConverter}}" Width="5" Margin="0 0 4 0"/>
+
+                                            <TextBlock Text="{Binding Name}" Grid.Column="1" FontSize="20"/>
+                                            <TextBlock Text="{Binding Rent, StringFormat='0.00'}" Grid.Column="1" Grid.Row="1" FontSize="16"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+                
+                <Border Grid.Row="4" BorderThickness="0.5" BorderBrush="Gray" Padding="5" Margin="2.5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Actions" Style="{StaticResource panelHeader}"/>
+                        <StackPanel Orientation="Vertical" Grid.Row="1">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="FontSize" Value="20"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Margin" Value="0 1"/>
+                                    <Setter Property="Background" Value="LightGray"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False">
+                                            <Setter Property="Background" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Resources>
+                            <Button Content="Roll Dice" BorderThickness="0" Command="{Binding RollDieCommand}" IsEnabled="{Binding !IsDiceRolled}" />
+                            <Button Content="Buy Land" BorderThickness="0" Command="{Binding BuyLandCommand}"/>
+                            <Button Content="End Turn" BorderThickness="0" Background="Green" Foreground="White" Command="{Binding EndTrunCommand}" IsEnabled="{Binding IsDiceRolled}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
             </Grid>
         </Grid>
-        
     </Grid>
 </Window>
